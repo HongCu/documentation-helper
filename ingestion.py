@@ -6,6 +6,8 @@ from langchain.vectorstores import Pinecone
 import pinecone
 from dotenv import load_dotenv
 
+from const import INDEX_NAME
+
 load_dotenv()
 
 pinecone.init(
@@ -35,7 +37,7 @@ def ingest_docs() -> None:
     print(f"Going to insert {len(documents)} to Pinecone")
     embeddings = OpenAIEmbeddings()
     Pinecone.from_documents(
-        documents, embeddings, index_name="medium-blogs-embeddings-index"
+        documents, embeddings, index_name=INDEX_NAME
     )
     print("****** Added to Pinecone vectorstore vectors")
 
