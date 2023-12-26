@@ -4,6 +4,9 @@ from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.embeddings import OpenAIEmbeddings
 from langchain.vectorstores import Pinecone
 import pinecone
+from dotenv import load_dotenv
+
+load_dotenv()
 
 pinecone.init(
     api_key=os.environ["PINECONE_API_KEY"],
@@ -12,7 +15,10 @@ pinecone.init(
 
 
 def ingest_docs() -> None:
-    loader = ReadTheDocsLoader(path="langchain-docs/langchain.readthedocs.io/en/latest")
+    loader = ReadTheDocsLoader(
+        path=r"D:\Users\Desktop\랭체인\documentation-helper\langchain-docs/api.python.langchain.com/en/latest",
+        encoding="utf-8"
+    )
     raw_documents = loader.load()
     print(f"loaded {len(raw_documents) }documents")
     text_splitter = RecursiveCharacterTextSplitter(
@@ -29,7 +35,7 @@ def ingest_docs() -> None:
     print(f"Going to insert {len(documents)} to Pinecone")
     embeddings = OpenAIEmbeddings()
     Pinecone.from_documents(
-        documents, embeddings, index_name="langchain-doc-index"
+        documents, embeddings, index_name="medium-blogs-embeddings-index"
     )
     print("****** Added to Pinecone vectorstore vectors")
 
